@@ -10,8 +10,8 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/rfjakob/gocryptfs/internal/ctlsock"
-	"github.com/rfjakob/gocryptfs/internal/syscallcompat"
+	"github.com/sapiens-sapide/gocryptfs/internal/ctlsock"
+	"github.com/sapiens-sapide/gocryptfs/internal/syscallcompat"
 	"github.com/rfjakob/gocryptfs/tests/test_helpers"
 )
 

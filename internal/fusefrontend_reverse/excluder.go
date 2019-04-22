@@ -5,9 +5,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rfjakob/gocryptfs/internal/exitcodes"
-	"github.com/rfjakob/gocryptfs/internal/fusefrontend"
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/exitcodes"
+	"github.com/sapiens-sapide/gocryptfs/internal/fusefrontend"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 
 	"github.com/sabhiram/go-gitignore"
 )

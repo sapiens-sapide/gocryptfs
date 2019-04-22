@@ -14,7 +14,7 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/rfjakob/gocryptfs/internal/stupidgcm"
+	"github.com/sapiens-sapide/gocryptfs/internal/stupidgcm"
 	"github.com/rfjakob/gocryptfs/tests/test_helpers"
 )
 

@@ -6,7 +6,7 @@ package prefer_openssl
 import (
 	"runtime"
 
-	"github.com/rfjakob/gocryptfs/internal/stupidgcm"
+	"github.com/sapiens-sapide/gocryptfs/internal/stupidgcm"
 )
 
 // PreferOpenSSL tells us if OpenSSL is faster than Go GCM on this machine.

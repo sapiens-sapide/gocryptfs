@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/rfjakob/gocryptfs/internal/fusefrontend"
+	"github.com/sapiens-sapide/gocryptfs/internal/fusefrontend"
 )
 
 func TestShouldNoCreateExcluderIfNoPattersWereSpecified(t *testing.T) {

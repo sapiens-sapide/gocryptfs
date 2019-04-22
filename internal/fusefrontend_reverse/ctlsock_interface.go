@@ -6,8 +6,8 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	"github.com/rfjakob/gocryptfs/internal/ctlsock"
-	"github.com/rfjakob/gocryptfs/internal/pathiv"
+	"github.com/sapiens-sapide/gocryptfs/internal/ctlsock"
+	"github.com/sapiens-sapide/gocryptfs/internal/pathiv"
 )
 
 var _ ctlsock.Interface = &ReverseFS{} // Verify that interface is implemented.

@@ -8,8 +8,8 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/rfjakob/gocryptfs/internal/configfile"
-	"github.com/rfjakob/gocryptfs/internal/exitcodes"
+	"github.com/sapiens-sapide/gocryptfs/internal/configfile"
+	"github.com/sapiens-sapide/gocryptfs/internal/exitcodes"
 
 	"github.com/rfjakob/gocryptfs/tests/test_helpers"
 )

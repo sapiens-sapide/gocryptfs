@@ -11,7 +11,7 @@ import (
 
 	"github.com/pkg/xattr"
 
-	"github.com/rfjakob/gocryptfs/internal/exitcodes"
+	"github.com/sapiens-sapide/gocryptfs/internal/exitcodes"
 	"github.com/rfjakob/gocryptfs/tests/test_helpers"
 )
 
