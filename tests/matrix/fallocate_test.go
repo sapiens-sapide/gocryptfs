@@ -6,7 +6,7 @@ import (
 	"syscall"
 	"testing"
 
-	"github.com/rfjakob/gocryptfs/internal/syscallcompat"
+	"github.com/sapiens-sapide/gocryptfs/internal/syscallcompat"
 	"github.com/rfjakob/gocryptfs/tests/test_helpers"
 )
 

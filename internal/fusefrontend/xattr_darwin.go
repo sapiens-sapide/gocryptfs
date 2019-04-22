@@ -10,7 +10,7 @@ import (
 
 	"github.com/hanwen/go-fuse/fuse"
 
-	"github.com/rfjakob/gocryptfs/internal/syscallcompat"
+	"github.com/sapiens-sapide/gocryptfs/internal/syscallcompat"
 )
 
 func disallowedXAttrName(attr string) bool {

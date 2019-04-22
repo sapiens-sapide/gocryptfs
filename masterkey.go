@@ -5,11 +5,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/rfjakob/gocryptfs/internal/configfile"
-	"github.com/rfjakob/gocryptfs/internal/cryptocore"
-	"github.com/rfjakob/gocryptfs/internal/exitcodes"
-	"github.com/rfjakob/gocryptfs/internal/readpassword"
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/configfile"
+	"github.com/sapiens-sapide/gocryptfs/internal/cryptocore"
+	"github.com/sapiens-sapide/gocryptfs/internal/exitcodes"
+	"github.com/sapiens-sapide/gocryptfs/internal/readpassword"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 )
 
 // parseMasterKey - Parse a hex-encoded master key that was passed on the command line

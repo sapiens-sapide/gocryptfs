@@ -23,16 +23,16 @@ import (
 	"github.com/hanwen/go-fuse/fuse/nodefs"
 	"github.com/hanwen/go-fuse/fuse/pathfs"
 
-	"github.com/rfjakob/gocryptfs/internal/configfile"
-	"github.com/rfjakob/gocryptfs/internal/contentenc"
-	"github.com/rfjakob/gocryptfs/internal/cryptocore"
-	"github.com/rfjakob/gocryptfs/internal/ctlsock"
-	"github.com/rfjakob/gocryptfs/internal/exitcodes"
-	"github.com/rfjakob/gocryptfs/internal/fusefrontend"
-	"github.com/rfjakob/gocryptfs/internal/fusefrontend_reverse"
-	"github.com/rfjakob/gocryptfs/internal/nametransform"
-	"github.com/rfjakob/gocryptfs/internal/openfiletable"
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/configfile"
+	"github.com/sapiens-sapide/gocryptfs/internal/contentenc"
+	"github.com/sapiens-sapide/gocryptfs/internal/cryptocore"
+	"github.com/sapiens-sapide/gocryptfs/internal/ctlsock"
+	"github.com/sapiens-sapide/gocryptfs/internal/exitcodes"
+	"github.com/sapiens-sapide/gocryptfs/internal/fusefrontend"
+	"github.com/sapiens-sapide/gocryptfs/internal/fusefrontend_reverse"
+	"github.com/sapiens-sapide/gocryptfs/internal/nametransform"
+	"github.com/sapiens-sapide/gocryptfs/internal/openfiletable"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 )
 
 // doMount mounts an encrypted directory.

@@ -12,11 +12,11 @@ import (
 
 	"github.com/hanwen/go-fuse/fuse"
 
-	"github.com/rfjakob/gocryptfs/internal/configfile"
-	"github.com/rfjakob/gocryptfs/internal/cryptocore"
-	"github.com/rfjakob/gocryptfs/internal/nametransform"
-	"github.com/rfjakob/gocryptfs/internal/syscallcompat"
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/configfile"
+	"github.com/sapiens-sapide/gocryptfs/internal/cryptocore"
+	"github.com/sapiens-sapide/gocryptfs/internal/nametransform"
+	"github.com/sapiens-sapide/gocryptfs/internal/syscallcompat"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 )
 
 const dsStoreName = ".DS_Store"

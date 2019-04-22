@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"os"
 
-	"github.com/rfjakob/gocryptfs/internal/exitcodes"
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/exitcodes"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 )
 
 func readPassFile(passfile string) []byte {

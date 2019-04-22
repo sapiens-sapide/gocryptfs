@@ -8,7 +8,7 @@ import (
 
 	"github.com/hanwen/go-fuse/fuse"
 
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 )
 
 // Will a write to plaintext offset "targetOff" create a file hole in the

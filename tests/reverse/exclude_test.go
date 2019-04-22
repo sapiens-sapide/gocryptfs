@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/rfjakob/gocryptfs/internal/ctlsock"
-	"github.com/rfjakob/gocryptfs/internal/nametransform"
+	"github.com/sapiens-sapide/gocryptfs/internal/ctlsock"
+	"github.com/sapiens-sapide/gocryptfs/internal/nametransform"
 	"github.com/rfjakob/gocryptfs/tests/test_helpers"
 )
 

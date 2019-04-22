@@ -4,7 +4,7 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 )
 
 // Send signal USR1 to "pid" (usually our parent process). This notifies it

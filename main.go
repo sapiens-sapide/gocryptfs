@@ -11,13 +11,13 @@ import (
 
 	"github.com/hanwen/go-fuse/fuse"
 
-	"github.com/rfjakob/gocryptfs/internal/configfile"
-	"github.com/rfjakob/gocryptfs/internal/contentenc"
-	"github.com/rfjakob/gocryptfs/internal/exitcodes"
-	"github.com/rfjakob/gocryptfs/internal/readpassword"
-	"github.com/rfjakob/gocryptfs/internal/speed"
-	"github.com/rfjakob/gocryptfs/internal/stupidgcm"
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/configfile"
+	"github.com/sapiens-sapide/gocryptfs/internal/contentenc"
+	"github.com/sapiens-sapide/gocryptfs/internal/exitcodes"
+	"github.com/sapiens-sapide/gocryptfs/internal/readpassword"
+	"github.com/sapiens-sapide/gocryptfs/internal/speed"
+	"github.com/sapiens-sapide/gocryptfs/internal/stupidgcm"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 )
 
 // GitVersion is the gocryptfs version according to git, set by build.bash

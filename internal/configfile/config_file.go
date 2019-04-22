@@ -10,10 +10,10 @@ import (
 	"log"
 	"syscall"
 
-	"github.com/rfjakob/gocryptfs/internal/contentenc"
-	"github.com/rfjakob/gocryptfs/internal/cryptocore"
-	"github.com/rfjakob/gocryptfs/internal/exitcodes"
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/contentenc"
+	"github.com/sapiens-sapide/gocryptfs/internal/cryptocore"
+	"github.com/sapiens-sapide/gocryptfs/internal/exitcodes"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 )
 import "os"
 

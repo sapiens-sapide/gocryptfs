@@ -15,12 +15,12 @@ import (
 	"github.com/hanwen/go-fuse/fuse"
 	"github.com/hanwen/go-fuse/fuse/nodefs"
 
-	"github.com/rfjakob/gocryptfs/internal/contentenc"
-	"github.com/rfjakob/gocryptfs/internal/openfiletable"
-	"github.com/rfjakob/gocryptfs/internal/serialize_reads"
-	"github.com/rfjakob/gocryptfs/internal/stupidgcm"
-	"github.com/rfjakob/gocryptfs/internal/syscallcompat"
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/contentenc"
+	"github.com/sapiens-sapide/gocryptfs/internal/openfiletable"
+	"github.com/sapiens-sapide/gocryptfs/internal/serialize_reads"
+	"github.com/sapiens-sapide/gocryptfs/internal/stupidgcm"
+	"github.com/sapiens-sapide/gocryptfs/internal/syscallcompat"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 )
 
 var _ nodefs.File = &File{} // Verify that interface is implemented.

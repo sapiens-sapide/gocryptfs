@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"regexp"
 
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 )
 
 // filePreferOpenSSL tells us if OpenSSL is faster than Go GCM on this machine.

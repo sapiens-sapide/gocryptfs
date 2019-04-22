@@ -16,7 +16,7 @@ import (
 
 	"github.com/hanwen/go-fuse/fuse"
 
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 )
 
 const sizeofDirent = int(unsafe.Sizeof(unix.Dirent{}))

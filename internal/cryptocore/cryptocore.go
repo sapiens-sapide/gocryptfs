@@ -12,9 +12,9 @@ import (
 
 	"github.com/rfjakob/eme"
 
-	"github.com/rfjakob/gocryptfs/internal/siv_aead"
-	"github.com/rfjakob/gocryptfs/internal/stupidgcm"
-	"github.com/rfjakob/gocryptfs/internal/tlog"
+	"github.com/sapiens-sapide/gocryptfs/internal/siv_aead"
+	"github.com/sapiens-sapide/gocryptfs/internal/stupidgcm"
+	"github.com/sapiens-sapide/gocryptfs/internal/tlog"
 )
 
 const (

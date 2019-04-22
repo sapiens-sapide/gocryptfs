@@ -3,8 +3,8 @@ package fusefrontend_reverse
 import (
 	"testing"
 
-	"github.com/rfjakob/gocryptfs/internal/configfile"
-	"github.com/rfjakob/gocryptfs/internal/nametransform"
+	"github.com/sapiens-sapide/gocryptfs/internal/configfile"
+	"github.com/sapiens-sapide/gocryptfs/internal/nametransform"
 )
 
 func TestShouldDetectDirIV(t *testing.T) {
