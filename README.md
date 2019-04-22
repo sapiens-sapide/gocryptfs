@@ -2,6 +2,8 @@
 [![Build Status](https://travis-ci.org/rfjakob/gocryptfs.svg?branch=master)](https://travis-ci.org/rfjakob/gocryptfs)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Go Report Card](https://goreportcard.com/badge/github.com/rfjakob/gocryptfs)](https://goreportcard.com/report/github.com/rfjakob/gocryptfs)
+[![Latest release](https://img.shields.io/github/release/rfjakob/gocryptfs.svg)](https://github.com/rfjakob/gocryptfs/releases)
+[![Homebrew version](https://img.shields.io/homebrew/v/gocryptfs.svg)](https://formulae.brew.sh/formula/gocryptfs#default)
 
 An encrypted overlay filesystem written in Go.
 Official website: https://nuetzlich.net/gocryptfs ([markdown source](https://github.com/rfjakob/gocryptfs-website/blob/master/docs/index.md)).
@@ -161,7 +163,17 @@ RM:    3.379
 Changelog
 ---------
 
-v1.7, in progress (v1.7-beta1: 2019-01-03, v1.7-rc1: 2019-01-04)
+vNEXT, in progress
+* Support wild cards in reverse mode via `--exclude-wildcard`
+  ([#367](https://github.com/rfjakob/gocryptfs/pull/367)). Thanks @ekalin!
+* Create `gocryptfs.diriv` files with 0440 permissions to make it easier to
+  share an encrypted folder via a network drive
+  ([#387](https://github.com/rfjakob/gocryptfs/issues/387)).
+  Note: as a security precaution, the owner must still manually 
+  `chmod gocryptfs.conf 0440` to allow mounting.
+* Allow the `nofail` option in `/etc/fstab`
+
+v1.7, 2019-03-17
 * **Fix possible symlink race attacks in forward mode** when using allow_other + plaintextnames
   * If you use *both* `-allow_other` *and* `-plaintextnames`, you should upgrade.
     Malicious users could trick gocryptfs into modifying files outside of `CIPHERDIR`,
@@ -184,6 +196,12 @@ v1.7, in progress (v1.7-beta1: 2019-01-03, v1.7-rc1: 2019-01-04)
   stdin,stdout and/or stderr closed.
 * `-extpass` now can be specified multiple times to support arguments containing spaces
   ([#289](https://github.com/rfjakob/gocryptfs/issues/289))
+* Drop Fstatat, Mkdirat, Syslinkat, Fchownat, Unlinkat, Renameat, Openat emulation of MacOS
+  and instead use native functions (thanks @slackner !)
+* Use `Setreuid` to robustly set the owner with allow_other (@slackner,
+  ([commit](https://github.com/rfjakob/gocryptfs/commit/03b9d65cce53fb95b7d489ecd03d0853b9b923fb)))
+* Pack the rendered man page into the source code archive for user convenience
+  ([issue 355](https://github.com/rfjakob/gocryptfs/issues/355))
 
 v1.6.1, 2018-12-12
 * Fix "Operation not supported" chmod errors on Go 1.11

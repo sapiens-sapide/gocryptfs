@@ -2,7 +2,7 @@ language: go
 
 # fuse on travis
 sudo: required
-dist: trusty
+dist: xenial
 
 git:
   depth: 300
@@ -36,7 +36,7 @@ script:
   - ./build-without-openssl.bash
   - ./build.bash
   - ./gocryptfs -speed
-  - ./test.bash
+  - ./test.bash -v
   - ./crossbuild.bash
   - echo "rebuild with locked dependencies"
   - echo travis_fold:start:dep

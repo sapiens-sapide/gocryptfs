@@ -43,6 +43,26 @@ func TestInit(t *testing.T) {
 	}
 }
 
+// Test that gocryptfs.conf and gocryptfs.diriv are there with the expected
+// permissions after -init
+func TestInitFilePerms(t *testing.T) {
+	dir := test_helpers.InitFS(t)
+	var st syscall.Stat_t
+	syscall.Stat(dir+"/gocryptfs.conf", &st)
+	perms := st.Mode & 0777
+	if perms != 0400 {
+		t.Errorf("Wrong permissions for gocryptfs.conf: %#o", perms)
+	}
+	st = syscall.Stat_t{}
+	syscall.Stat(dir+"/gocryptfs.diriv", &st)
+	perms = st.Mode & 0777
+	// From v1.7.1, these are created with 0440 permissions, see
+	// https://github.com/rfjakob/gocryptfs/issues/387
+	if perms != 0440 {
+		t.Errorf("Wrong permissions for gocryptfs.diriv: %#o", perms)
+	}
+}
+
 // Test -init with -devrandom flag
 func TestInitDevRandom(t *testing.T) {
 	test_helpers.InitFS(t, "-devrandom")
@@ -265,6 +285,14 @@ func TestNonempty(t *testing.T) {
 	test_helpers.UnmountPanic(mnt)
 }
 
+// -nofail should be ignored and the mount should succeed
+func TestNofail(t *testing.T) {
+	dir := test_helpers.InitFS(t)
+	mnt := dir + ".mnt"
+	test_helpers.MountOrFatal(t, dir, mnt, "-nofail", "-extpass=echo test")
+	defer test_helpers.UnmountPanic(mnt)
+}
+
 // Test "mountpoint shadows cipherdir" handling
 func TestShadows(t *testing.T) {
 	mnt := test_helpers.InitFS(t)
@@ -286,50 +314,6 @@ func TestShadows(t *testing.T) {
 	err = test_helpers.Mount(cipher2, mnt, false, "-extpass=echo test")
 	if err == nil {
 		t.Errorf("Should have failed")
-	}
-}
-
-// TestInitTrailingGarbage verfies that gocryptfs exits with an error if we
-// pass additional data after the password.
-func TestInitTrailingGarbage(t *testing.T) {
-	table := []struct {
-		pw            string
-		closeStdin    bool
-		expectSuccess bool
-	}{
-		{"foo\n", false, true},
-		{"foo", true, true},
-		{"foo\n", true, true},
-		{"foo\n\n", false, false},
-		{"foo\nbar", false, false},
-		{"foo\n\n", true, false},
-		{"foo\nbar", true, false},
-	}
-	for _, row := range table {
-		dir, err := ioutil.TempDir(test_helpers.TmpDir, "")
-		if err != nil {
-			t.Fatal(err)
-		}
-		cmd := exec.Command(test_helpers.GocryptfsBinary, "-q", "-init", "-scryptn=10", dir)
-		childStdin, err := cmd.StdinPipe()
-		if err != nil {
-			t.Fatal(err)
-		}
-		err = cmd.Start()
-		if err != nil {
-			t.Fatal(err)
-		}
-		childStdin.Write([]byte(row.pw))
-		if row.closeStdin {
-			childStdin.Close()
-		}
-		err = cmd.Wait()
-		success := (err == nil)
-		if success == true && row.expectSuccess == false {
-			t.Errorf("pw=%q should have failed, but succeeded", row.pw)
-		} else if success == false && row.expectSuccess == true {
-			t.Errorf("pw=%q should have succeeded, but failed", row.pw)
-		}
 	}
 }
 
