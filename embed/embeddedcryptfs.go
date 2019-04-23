@@ -492,12 +492,15 @@ func handleSigint(srv *fuse.Server, mountpoint string) {
 
 func handleController(ch chan string, srv *fuse.Server, mountpoint string) {
 	go func() {
-		switch <-ch {
-		case "kill":
-			unmount(srv, mountpoint)
-			os.Exit(exitcodes.SigInt)
+		for order := range ch {
+			switch order {
+			case "kill":
+				unmount(srv, mountpoint)
+				os.Exit(exitcodes.SigInt)
+			default:
+				tlog.Info.Printf("unknown order : %s", order)
+			}
 		}
-
 	}()
 }
 
