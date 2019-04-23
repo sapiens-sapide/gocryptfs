@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"log/syslog"
 	"math"
 	"net"
 	"os"
@@ -46,9 +45,14 @@ type EmbedOptions struct {
 }
 
 // should return an error and a chan to control ?
-func MountFS(opts EmbedOptions) {
-	setDefaults(opts)
-	doMount(opts.Password)
+func MountCryptFS(opts EmbedOptions, errFd *os.File, controller chan string) error {
+	err := setDefaults(opts)
+	if err != nil {
+		return err
+	}
+	errChan := make(chan error)
+	go doMount(opts.Password, errChan, errFd, controller)
+	return <-errChan
 }
 
 type multipleStrings []string
@@ -58,7 +62,7 @@ func (s *multipleStrings) Empty() bool {
 	return len(s2) == 0
 }
 
-func setDefaults(opts EmbedOptions) {
+func setDefaults(opts EmbedOptions) error {
 	var err error
 	options = new(gocryptfsOptions)
 
@@ -66,8 +70,7 @@ func setDefaults(opts EmbedOptions) {
 	options.cipherdir, _ = filepath.Abs(opts.CipherDir)
 	err = isDir(options.cipherdir)
 	if err != nil {
-		tlog.Fatal.Printf("Invalid cipherdir: %v", err)
-		os.Exit(exitcodes.CipherDir)
+		return fmt.Errorf("Invalid cipherdir: %v", err)
 	}
 
 	// cipherdir config
@@ -75,12 +78,15 @@ func setDefaults(opts EmbedOptions) {
 
 	options.mountpoint, err = filepath.Abs(opts.MountPoint)
 	if err != nil {
-		tlog.Fatal.Printf("Invalid mountpoint: %v", err)
-		os.Exit(exitcodes.MountPoint)
+		return fmt.Errorf("Invalid mountpoint: %v", err)
 	}
 
 	options.masterkey = opts.MasterKey
 
+	// by default we do not want a useless plain directory mounted too long
+	// TODO : hack expiration handling
+	options.idle = 1 * time.Minute
+	return nil
 }
 
 type gocryptfsOptions struct {
@@ -112,23 +118,25 @@ type gocryptfsOptions struct {
 }
 
 // doMount mounts an encrypted directory.
-func doMount(password *string) {
+func doMount(password *string, errChan chan error, errFd *os.File, controller chan string) {
 	// Check mountpoint
 	var err error
 
 	// We cannot mount "/home/user/.cipher" at "/home/user" because the mount
 	// will hide ".cipher" also for us.
 	if options.cipherdir == options.mountpoint || strings.HasPrefix(options.cipherdir, options.mountpoint+"/") {
-		tlog.Fatal.Printf("Mountpoint %q would shadow cipherdir %q, this is not supported",
+		errChan <- fmt.Errorf("Mountpoint %q would shadow cipherdir %q, this is not supported",
 			options.mountpoint, options.cipherdir)
-		os.Exit(exitcodes.MountPoint)
+		close(errChan)
+		return
 	}
 	// Reverse-mounting "/foo" at "/foo/mnt" means we would be recursively
 	// encrypting ourselves.
 	if strings.HasPrefix(options.mountpoint, options.cipherdir+"/") {
-		tlog.Fatal.Printf("Mountpoint %q is contained in cipherdir %q, this is not supported",
+		errChan <- fmt.Errorf("Mountpoint %q is contained in cipherdir %q, this is not supported",
 			options.mountpoint, options.cipherdir)
-		os.Exit(exitcodes.MountPoint)
+		close(errChan)
+		return
 	}
 	if options.nonempty {
 		err = isDir(options.mountpoint)
@@ -142,8 +150,9 @@ func doMount(password *string) {
 		}
 	}
 	if err != nil {
-		tlog.Fatal.Printf("Invalid mountpoint: %v", err)
-		os.Exit(exitcodes.MountPoint)
+		errChan <- fmt.Errorf("Invalid mountpoint: %v", err)
+		close(errChan)
+		return
 	}
 	// Open control socket early so we can error out before asking the user
 	// for the password
@@ -154,8 +163,9 @@ func doMount(password *string) {
 		var sock net.Listener
 		sock, err = net.Listen("unix", options.ctlsock)
 		if err != nil {
-			tlog.Fatal.Printf("ctlsock: %v", err)
-			os.Exit(exitcodes.CtlSock)
+			errChan <- fmt.Errorf("ctlsock: %v", err)
+			close(errChan)
+			return
 		}
 		options._ctlsockFd = sock
 		// Close also deletes the socket file
@@ -174,32 +184,8 @@ func doMount(password *string) {
 	defer wipeKeys()
 
 	tlog.Info.Println(tlog.ColorGreen + "Filesystem mounted and ready." + tlog.ColorReset)
-	// We have been forked into the background, as evidenced by the set
-	// "notifypid".
-	if options.notifypid > 0 {
-		// Chdir to the root directory so we don't block unmounting the CWD
-		os.Chdir("/")
-		// Switch to syslog
-		if !options.nosyslog {
-			// Switch all of our logs and the generic logger to syslog
-			tlog.Info.SwitchToSyslog(syslog.LOG_USER | syslog.LOG_INFO)
-			tlog.Debug.SwitchToSyslog(syslog.LOG_USER | syslog.LOG_DEBUG)
-			tlog.Warn.SwitchToSyslog(syslog.LOG_USER | syslog.LOG_WARNING)
-			tlog.Fatal.SwitchToSyslog(syslog.LOG_USER | syslog.LOG_CRIT)
-			tlog.SwitchLoggerToSyslog(syslog.LOG_USER | syslog.LOG_WARNING)
-			// Daemons should redirect stdin, stdout and stderr
-			// TODO redirectStdFds()
-		}
-		// Disconnect from the controlling terminal by creating a new session.
-		// This prevents us from getting SIGINT when the user presses Ctrl-C
-		// to exit a running script that has called gocryptfs.
-		_, err = syscall.Setsid()
-		if err != nil {
-			tlog.Warn.Printf("Setsid: %v", err)
-		}
-		// Send SIGUSR1 to our parent
-		// TODO sendUsr1(options.notifypid)
-	}
+
+	redirectStdFds(errFd)
 	// Increase the open file limit to 4096. This is not essential, so do it after
 	// we have switched to syslog and don't bother the user with warnings.
 	setOpenFileLimit()
@@ -207,6 +193,8 @@ func doMount(password *string) {
 	// This prevents a dangling "Transport endpoint is not connected"
 	// mountpoint if the user hits CTRL-C.
 	handleSigint(srv, options.mountpoint)
+	// listen to orders send by caller
+	handleController(controller, srv, options.mountpoint)
 	// Return memory that was allocated for scrypt (64M by default!) and other
 	// stuff that is no longer needed to the OS
 	debug.FreeOSMemory()
@@ -216,7 +204,11 @@ func doMount(password *string) {
 		fwdFs := fs.(*fusefrontend.FS)
 		go idleMonitor(options.idle, fwdFs, srv, options.mountpoint)
 	}
-	// Jump into server loop. Returns when it gets an umount request from the kernel.
+	// no error until here, signal caller
+	errChan <- nil
+	close(errChan)
+
+	// Jump into server loop. Returns when it gets an umount request
 	srv.Serve()
 }
 
@@ -495,6 +487,17 @@ func handleSigint(srv *fuse.Server, mountpoint string) {
 		<-ch
 		unmount(srv, mountpoint)
 		os.Exit(exitcodes.SigInt)
+	}()
+}
+
+func handleController(ch chan string, srv *fuse.Server, mountpoint string) {
+	go func() {
+		switch <-ch {
+		case "kill":
+			unmount(srv, mountpoint)
+			os.Exit(exitcodes.SigInt)
+		}
+
 	}()
 }
 
