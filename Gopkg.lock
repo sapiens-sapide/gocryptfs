@@ -45,6 +45,32 @@
   revision = "2222dbd4ba467ab3fc7e8af41562fcfe69c0d770"
 
 [[projects]]
+  digest = "1:2100a9c0bc0ea7c30128f979f2044e771908f029e140bafe3603c1165e9fd37d"
+  name = "github.com/rfjakob/gocryptfs"
+  packages = [
+    "internal/cryptocore",
+    "internal/ctlsock",
+    "internal/exitcodes",
+    "internal/nametransform",
+    "internal/siv_aead",
+    "internal/stupidgcm",
+    "internal/syscallcompat",
+    "internal/tlog",
+    "tests/test_helpers",
+  ]
+  pruneopts = ""
+  revision = "8373959c951e0557ef77ed3eb56d0c9a94fc8f8a"
+  version = "v1.7"
+
+[[projects]]
+  digest = "1:321aeb7694b1803b7c7e27191e464ec2ce541a2730b3a0c5f7451296d9b3a69e"
+  name = "github.com/sabhiram/go-gitignore"
+  packages = ["."]
+  pruneopts = ""
+  revision = "d3107576ba9425fc1c85f4b3569c4631b805a02e"
+  version = "1.0.2"
+
+[[projects]]
   branch = "master"
   digest = "1:ab3e9a81a5ec54c5d1ed41d0d6898ba88c6799fa401b784b06bdee8e432d872b"
   name = "golang.org/x/crypto"
@@ -86,6 +112,8 @@
     "github.com/jacobsa/crypto/siv",
     "github.com/pkg/xattr",
     "github.com/rfjakob/eme",
+    "github.com/rfjakob/gocryptfs/tests/test_helpers",
+    "github.com/sabhiram/go-gitignore",
     "golang.org/x/crypto/hkdf",
     "golang.org/x/crypto/scrypt",
     "golang.org/x/crypto/ssh/terminal",
